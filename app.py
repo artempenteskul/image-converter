@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 
-from utils import generate_id_for_file
+from utils import generate_id_for_file, get_filename_from_file_id
 
 
 UPLOAD_FOLDER = 'media'
@@ -37,7 +37,7 @@ def upload_file():
     file = request.files['file']
     file.save(os.path.join(UPLOAD_FOLDER_ORIGINAL, file_id, secure_filename(file.filename)))
 
-    return jsonify({'message': 'success'})
+    return jsonify({'message': 'success', 'file_id': file_id})
 
 
 @app.route('/download/<path:file_id>/', methods=['GET'])
@@ -48,4 +48,5 @@ def download_file(file_id):
         resp.status_code = 400
         return resp
 
-    return send_from_directory(os.path.join(UPLOAD_FOLDER_ORIGINAL, file_id), 'filename')
+    filename = get_filename_from_file_id(file_id)
+    return send_from_directory(os.path.join(UPLOAD_FOLDER_ORIGINAL, file_id), filename)

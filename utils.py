@@ -1,5 +1,22 @@
+import os
 import uuid
 
 
-def generate_id_for_file():
+UPLOAD_FOLDER_ORIGINAL = 'media/100'
+
+
+def generate_id_for_file() -> str:
     return str(uuid.uuid4())
+
+
+def get_filename_from_file_id(file_id: str) -> str:
+    if os.path.exists(os.path.join(UPLOAD_FOLDER_ORIGINAL, file_id)):
+        files_in_folder = os.listdir(os.path.join(UPLOAD_FOLDER_ORIGINAL, file_id))
+        if len(files_in_folder) > 1:
+            # probably we need to add better explanation for exception here
+            raise Exception('Multiple files for one id.')
+        filename = files_in_folder[0]
+        return filename
+    else:
+        # here we need to add better explanation for exception
+        raise Exception('Unknown files route.')
