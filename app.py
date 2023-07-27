@@ -49,4 +49,4 @@ def download_file(file_id):
         return resp
 
     filename = get_filename_from_file_id(file_id)
-    return send_from_directory(os.path.join(UPLOAD_FOLDER_ORIGINAL, file_id), filename)
+    return send_from_directory(os.path.join(UPLOAD_FOLDER, quality, file_id), filename)
