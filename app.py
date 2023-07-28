@@ -13,9 +13,6 @@ UPLOAD_FOLDER = 'media'
 app = Flask(__name__)
 
 
-# if not os.path.exists('media'):
-#     os.makedirs('media')
-
 for q in QualityEnum:
     if not os.path.exists(f'media/{q.value}'):
         os.makedirs(f'media/{q.value}')

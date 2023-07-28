@@ -8,7 +8,6 @@ UPLOAD_FOLDER = 'media'
 IMG_CONVERTER_QUEUE = 'img-converter-queue'
 
 
-# check int enum in order to make enum with keys 100, 75, 50, 25
 class QualityEnum(Enum):
     HUNDRED = '100'
     SEVENTY_FIVE = '75'
