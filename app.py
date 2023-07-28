@@ -3,7 +3,7 @@ import os
 from flask import Flask, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
 
-from utils import QualityEnum, generate_id_for_file, get_filename_from_file_id
+from utils import QualityEnum, generate_id_for_file, get_filename_from_file_id, send_message_to_rabbitmq
 
 
 UPLOAD_FOLDER = 'media'
@@ -14,6 +14,22 @@ app = Flask(__name__)
 
 if not os.path.exists('media'):
     os.makedirs('media')
+
+
+if not os.path.exists(f'media/{QualityEnum.HUNDRED.value}'):
+    os.makedirs(f'media/{QualityEnum.HUNDRED.value}')
+
+
+if not os.path.exists(f'media/{QualityEnum.SEVENTY_FIVE.value}'):
+    os.makedirs(f'media/{QualityEnum.SEVENTY_FIVE.value}')
+
+
+if not os.path.exists(f'media/{QualityEnum.FIFTY.value}'):
+    os.makedirs(f'media/{QualityEnum.FIFTY.value}')
+
+
+if not os.path.exists(f'media/{QualityEnum.TWENTY_FIVE.value}'):
+    os.makedirs(f'media/{QualityEnum.TWENTY_FIVE.value}')
 
 
 @app.route('/', methods=['GET'])
@@ -52,14 +68,3 @@ def download_file(file_id):
 
     filename = get_filename_from_file_id(file_id)
     return send_from_directory(os.path.join(UPLOAD_FOLDER, quality, file_id), filename)
-
-
-
-import pika
-
-def send_message_to_rabbitmq(message):
-    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
-    channel = connection.channel()
-    channel.queue_declare(queue='img-converter-queue')
-    channel.basic_publish(exchange='', routing_key='img-converter-queue', body=message)
-    connection.close()

@@ -1,6 +1,9 @@
 import pika
 
 
+IMG_CONVERTER_QUEUE = 'img-converter-queue'
+
+
 def process_message(ch, method, properties, body):
     print(f'Received: {body}')
     file_id_to_convert = body.decode('UTF-8')

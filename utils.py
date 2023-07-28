@@ -1,9 +1,11 @@
 import os
+import pika
 import uuid
 
 from enum import Enum
 
 UPLOAD_FOLDER = 'media'
+IMG_CONVERTER_QUEUE = 'img-converter-queue'
 
 
 # check int enum in order to make enum with keys 100, 75, 50, 25
@@ -31,3 +33,11 @@ def get_filename_from_file_id(file_id: str) -> str:
     else:
         # here we need to add better explanation for exception
         raise Exception('Unknown files route.')
+
+
+def send_message_to_rabbitmq(message):
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+    channel.queue_declare(queue=IMG_CONVERTER_QUEUE)
+    channel.basic_publish(exchange='', routing_key=IMG_CONVERTER_QUEUE, body=message)
+    connection.close()
