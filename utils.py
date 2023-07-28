@@ -23,8 +23,8 @@ def generate_id_for_file() -> str:
 
 
 def get_filename_from_file_id(file_id: str) -> str:
-    if os.path.exists(os.path.join(UPLOAD_FOLDER, '100', file_id)):
-        files_in_folder = os.listdir(os.path.join(UPLOAD_FOLDER, '100', file_id))
+    if os.path.exists(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id)):
+        files_in_folder = os.listdir(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id))
         if len(files_in_folder) > 1:
             # TODO: add better explanation for exception here
             raise Exception('Multiple files for one id.')

@@ -23,7 +23,7 @@ for q in QualityEnum:
         os.makedirs(f'media/{q.value}')
 
 
-@app.route('/', methods=['GET'])
+@app.route('/healthcheck/', methods=['GET'])
 def healthcheck():
     resp = jsonify({'message': 'Up and running'})
     resp.status_code = 200
@@ -40,6 +40,8 @@ def upload_file():
     file = request.files['file']
     file_id = generate_id_for_file()
     filename = file.filename
+
+    # TODO: make try/except block for this logic
 
     os.makedirs(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id))
 
