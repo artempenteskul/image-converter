@@ -1,4 +1,5 @@
 import os
+import json
 
 from flask import Flask, request, jsonify, send_from_directory
 from werkzeug.utils import secure_filename
@@ -34,14 +35,15 @@ def upload_file():
         resp.status_code = 400
         return resp
 
+    file = request.files['file']
     file_id = generate_id_for_file()
+    filename = file.filename
 
     os.makedirs(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id))
 
-    file = request.files['file']
-    file.save(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id, secure_filename(file.filename)))
+    file.save(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id, secure_filename(filename)))
 
-    send_message_to_rabbitmq(file_id)
+    send_message_to_rabbitmq(json.dumps({'file_id': file_id, 'filename': filename}))
 
     return jsonify({'message': 'success', 'file_id': file_id})
 

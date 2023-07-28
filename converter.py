@@ -1,13 +1,13 @@
 import pika
+import json
 
 
 IMG_CONVERTER_QUEUE = 'img-converter-queue'
 
 
 def process_message(ch, method, properties, body):
-    print(f'Received: {body}')
-    file_id_to_convert = body.decode('UTF-8')
-    print(f'{file_id_to_convert}')
+    body = json.loads(body)
+    print(f'BODY - {body}')
 
 
 if __name__ == '__main__':
