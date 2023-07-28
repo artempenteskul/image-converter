@@ -4,6 +4,7 @@ from PIL import Image
 
 from utils import QualityEnum
 
+
 UPLOAD_FOLDER = 'media'
 
 

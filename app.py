@@ -12,24 +12,12 @@ UPLOAD_FOLDER = 'media'
 app = Flask(__name__)
 
 
-if not os.path.exists('media'):
-    os.makedirs('media')
+# if not os.path.exists('media'):
+#     os.makedirs('media')
 
-
-if not os.path.exists(f'media/{QualityEnum.HUNDRED.value}'):
-    os.makedirs(f'media/{QualityEnum.HUNDRED.value}')
-
-
-if not os.path.exists(f'media/{QualityEnum.SEVENTY_FIVE.value}'):
-    os.makedirs(f'media/{QualityEnum.SEVENTY_FIVE.value}')
-
-
-if not os.path.exists(f'media/{QualityEnum.FIFTY.value}'):
-    os.makedirs(f'media/{QualityEnum.FIFTY.value}')
-
-
-if not os.path.exists(f'media/{QualityEnum.TWENTY_FIVE.value}'):
-    os.makedirs(f'media/{QualityEnum.TWENTY_FIVE.value}')
+for q in QualityEnum:
+    if not os.path.exists(f'media/{q.value}'):
+        os.makedirs(f'media/{q.value}')
 
 
 @app.route('/', methods=['GET'])
@@ -61,7 +49,7 @@ def upload_file():
 @app.route('/download/<path:file_id>/', methods=['GET'])
 def download_file(file_id):
     quality = request.args.get('quality', QualityEnum.HUNDRED.value)
-    if quality not in (q for q in QualityEnum):
+    if quality not in (q.value for q in QualityEnum):
         resp = jsonify({'message': 'Incorrect quality value. Supported values: 100, 75, 50 and 25.'})
         resp.status_code = 400
         return resp
