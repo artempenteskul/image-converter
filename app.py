@@ -37,6 +37,8 @@ def upload_file():
     file = request.files['file']
     file.save(os.path.join(UPLOAD_FOLDER, QualityEnum.HUNDRED.value, file_id, secure_filename(file.filename)))
 
+    send_message_to_rabbitmq(file_id)
+
     return jsonify({'message': 'success', 'file_id': file_id})
 
 
@@ -61,5 +63,3 @@ def send_message_to_rabbitmq(message):
     channel.queue_declare(queue='img-converter-queue')
     channel.basic_publish(exchange='', routing_key='img-converter-queue', body=message)
     connection.close()
-
-

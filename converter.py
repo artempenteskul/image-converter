@@ -3,6 +3,8 @@ import pika
 
 def process_message(ch, method, properties, body):
     print(f'Received: {body}')
+    file_id_to_convert = body.decode('UTF-8')
+    print(f'{file_id_to_convert}')
 
 
 if __name__ == '__main__':
