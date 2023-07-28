@@ -4,6 +4,8 @@ import uuid
 
 from enum import Enum
 
+
+# TODO: move these hardcoded variables to the env variables / config files
 UPLOAD_FOLDER = 'media'
 IMG_CONVERTER_QUEUE = 'img-converter-queue'
 
@@ -16,8 +18,7 @@ class QualityEnum(Enum):
 
 
 def generate_id_for_file() -> str:
-    # here we need to add check whether we already use this uuid or not
-    # we can implement it using listdir all folders in original folder and compare existing ids with our
+    # TODO: check whether this uuid already exists in for our files (use listdir for check)
     return str(uuid.uuid4())
 
 
@@ -25,16 +26,17 @@ def get_filename_from_file_id(file_id: str) -> str:
     if os.path.exists(os.path.join(UPLOAD_FOLDER, '100', file_id)):
         files_in_folder = os.listdir(os.path.join(UPLOAD_FOLDER, '100', file_id))
         if len(files_in_folder) > 1:
-            # probably we need to add better explanation for exception here
+            # TODO: add better explanation for exception here
             raise Exception('Multiple files for one id.')
         filename = files_in_folder[0]
         return filename
     else:
-        # here we need to add better explanation for exception
+        # TODO: add better explanation for exception here
         raise Exception('Unknown files route.')
 
 
 def send_message_to_rabbitmq(message):
+    # TODO: extract connection to rabbitmq to env variables (localhost for example)
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
     channel.queue_declare(queue=IMG_CONVERTER_QUEUE)

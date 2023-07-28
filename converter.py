@@ -7,6 +7,7 @@ from PIL import Image
 from utils import QualityEnum
 
 
+# TODO: move these hardcoded variables to the env variables / config files
 UPLOAD_FOLDER = 'media'
 IMG_CONVERTER_QUEUE = 'img-converter-queue'
 
@@ -18,6 +19,9 @@ def make_different_qualities_img(file_id: str, filename: str) -> None:
             img.save(os.path.join(UPLOAD_FOLDER, img_quality, file_id, filename), quality=int(img_quality))
 
 
+# TODO: refactor this module and logic for better understanding
+
+
 def process_message(ch, method, properties, body):
     body = json.loads(body)
     file_id = body['file_id']
@@ -27,6 +31,7 @@ def process_message(ch, method, properties, body):
 
 
 if __name__ == '__main__':
+    # TODO: extract connection to rabbitmq to env variables (localhost for example)
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
     channel.queue_declare(queue=IMG_CONVERTER_QUEUE)

@@ -7,6 +7,11 @@ from werkzeug.utils import secure_filename
 from utils import QualityEnum, generate_id_for_file, get_filename_from_file_id, send_message_to_rabbitmq
 
 
+# TODO: overall refactoring
+# TODO: make better structure for the project (add running with gunicorn and containerize with docker)
+
+
+# TODO: move these hardcoded variables to the env variables / config files
 UPLOAD_FOLDER = 'media'
 
 
@@ -52,6 +57,8 @@ def download_file(file_id):
         resp = jsonify({'message': 'Incorrect quality value. Supported values: 100, 75, 50 and 25.'})
         resp.status_code = 400
         return resp
+
+    # TODO: check whether file with this file_id exists
 
     filename = get_filename_from_file_id(file_id)
     return send_from_directory(os.path.join(UPLOAD_FOLDER, quality, file_id), filename)
