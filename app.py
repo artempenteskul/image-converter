@@ -50,3 +50,16 @@ def download_file(file_id):
 
     filename = get_filename_from_file_id(file_id)
     return send_from_directory(os.path.join(UPLOAD_FOLDER, quality, file_id), filename)
+
+
+
+import pika
+
+def send_message_to_rabbitmq(message):
+    connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
+    channel = connection.channel()
+    channel.queue_declare(queue='img-converter-queue')
+    channel.basic_publish(exchange='', routing_key='img-converter-queue', body=message)
+    connection.close()
+
+
