@@ -13,8 +13,8 @@ def process_message(ch, method, properties, body):
 if __name__ == '__main__':
     connection = pika.BlockingConnection(pika.ConnectionParameters('localhost'))
     channel = connection.channel()
-    channel.queue_declare(queue='img-converter-queue')
-    channel.basic_consume(queue='img-converter-queue', on_message_callback=process_message, auto_ack=True)
+    channel.queue_declare(queue=IMG_CONVERTER_QUEUE)
+    channel.basic_consume(queue=IMG_CONVERTER_QUEUE, on_message_callback=process_message, auto_ack=True)
 
     print('Waiting for messages. Process has started.')
 
